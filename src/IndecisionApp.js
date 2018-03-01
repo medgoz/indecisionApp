@@ -1,46 +1,53 @@
 import React, { Component } from 'react';
-
-class Header extends React.Component {
-	render() {
-		return (
-			<div>
-				<h1>Indecision</h1>
-				<h2>Put your life in the hands of a computer</h2>
-			</div>
-		);
-	}
-}
-
-class Action extends React.Component {
-	render() {
-		return (
-			<div>
-				<button>What should I do?</button>
-			</div>
-		);
-	}
-}
-
-class Options extends React.Component {
-	render() {
-		return <div>Options here!</div>;
-	}
-}
-
-class AddOption extends React.Component {
-	render() {
-		return <div>Add Option here!</div>;
-	}
-}
+import Header from './Header';
+import Action from './Action';
+import Options from './Options';
+import AddOption from './AddOption';
 
 class IndecisionApp extends Component {
+	state = {
+		options: [], //['Thing one', 'Thing two', 'Thing three'],
+	};
+
+	handleDeleteOptions = () => {
+		this.setState(() => ({
+			options: [],
+		}));
+	};
+
+	handlePick = () => {
+		const n = Math.floor(Math.random() * this.state.options.length);
+		const picked = this.state.options[n];
+	};
+
+	handleAddOption = option => {
+		if (!option) {
+			return 'Enter valid value to add item!';
+		} else if (this.state.options.indexOf(option) > -1) {
+			return 'This option already exists!';
+		}
+		// if none of the options are true, we'll set the state
+		this.setState(() => ({
+			options: [...this.state.options, option],
+		}));
+	};
+
 	render() {
 		return (
 			<div>
-				<Header />
-				<Action />
-				<Options />
-				<AddOption />
+				<Header
+					title="Indecision Application"
+					subtitle="Put your life in the hands of a computer!"
+				/>
+				<Action
+					hasOptions={this.state.options.length}
+					handlePick={this.handlePick}
+				/>
+				<Options
+					options={this.state.options}
+					handleDeleteOptions={this.handleDeleteOptions}
+				/>
+				<AddOption handleAddOption={this.handleAddOption} />
 			</div>
 		);
 	}
